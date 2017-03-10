@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import onlinejudge.dto.MyResponse;
-import onlinejudge.dto.file.GroupResource;
-import onlinejudge.dto.file.MyResource;
+import onlinejudge.file.dto.GroupResource;
+import onlinejudge.file.dto.MyResource;
 
 @Controller
 public class ResourceController {
@@ -37,8 +37,6 @@ public class ResourceController {
 		paths.put(MyResource.RESOURCE_TYPE_SUBMIT, submitPath);
 	}
 
-	private void addPathToMap(){
-	}
 	
 //	@RequestMapping({"/","/about"})
 //	public String about(){
@@ -48,7 +46,7 @@ public class ResourceController {
 	@RequestMapping({"/","/about"})
 	public @ResponseBody GroupResource about(){
 		GroupResource group = new GroupResource();
-		MyResource resource = new MyResource(new BigInteger("1"), "prob", "abc/prob.txt", new byte[]{65});
+		MyResource resource = new MyResource("dsad43", "prob", "abc/prob.txt", new byte[]{65});
 		group.add(resource);
 		return group;
 	}
@@ -94,7 +92,7 @@ public class ResourceController {
 			}
 			myResponse = MyResponse.builder().success().build();
 		}catch(ExceptionNeedRollback e){
-			myResponse = MyResponse.builder().fail().build();
+			myResponse = MyResponse.builder().fail().setObj(e.getMessage()).build();
 			//rollback
 			for (String path : listNewFileName) {
 				FileUtils.deleteQuietly(new File(path));
